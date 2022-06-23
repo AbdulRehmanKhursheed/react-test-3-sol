@@ -11,7 +11,7 @@ const SignUp = (props) => {
   const [users,setUsers] = useState([]);
   const [adminFound, setAdminFound] = useState(false);
   const [userAlreadyExist, setUserAlreadyExist] = useState(false);
-  const [showMessage, setMessage]=useState("")
+  const [showMessage, setMessage]=useState()
   const fetchUsersHandler = useCallback(async () => {
     try {
       const response = await fetch(
@@ -102,11 +102,12 @@ const SignUp = (props) => {
   const submitHandler = async (event) => {
     event.preventDefault();
     let foundUser = users.find((element) => {
-        return element.email == emailValue;
+        return element.email === emailValue;
       })
     if(foundUser){
         setUserAlreadyExist(true);
         setMessage(" User Name with the given email already exist.")
+        return;
     }
     
     if (!formIsValid && foundUser ) {
@@ -143,28 +144,23 @@ const SignUp = (props) => {
         resetConfirmPassword();
         setMessage("Sign Up Successful")
     }
-    
-
-  
   };
+
   const getIsAdminVal = () => {
     setIsAdmin((prev) => !prev);
   };
   const navigateToSignIn = () => {
     navigate("../", { replace: true });
   };
-  const firstNameClasses = firstNameHasError
-    ? "form-control invalid"
-    : "form-control";
-  const lastNameClasses = lastNameHasError
-    ? "form-control invalid"
-    : "form-control";
+  const firstNameClasses = firstNameHasError ? "form-control invalid" : "form-control";
+  const lastNameClasses = lastNameHasError ? "form-control invalid" : "form-control";
   const emailClasses = emailHasError ? "form-control invalid" : "form-control";
-
+  const passwordClasses = passwordHasError ? "form-control invalid" : "form-control";
+  const confirmPasswordClasses = confirmpPasswordHasError ? "form-control invalid" : "form-control";
   return (
     <form onSubmit={submitHandler} className="align-middle">
       <h3>Sign Up</h3>
-      {userAlreadyExist && (
+      {showMessage && (
         <p className="error-text">
          {showMessage}
         </p>
@@ -213,7 +209,7 @@ const SignUp = (props) => {
           <p className="error-text">Please enter a valid email address.</p>
         )}
       </div>
-      <div className={emailClasses}>
+      <div className={passwordClasses}>
         <label htmlFor="name">Password</label>
         <br />
         <input
@@ -227,7 +223,7 @@ const SignUp = (props) => {
           <p className="error-text">Please enter ateast 6 characters.</p>
         )}
       </div>
-      <div className={emailClasses}>
+      <div className={confirmPasswordClasses}>
         <label htmlFor="name">Confirm Password</label>
         <br />
         <input
