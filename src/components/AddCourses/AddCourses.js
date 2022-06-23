@@ -23,8 +23,10 @@ const AddCourse = () => {
       return;
     } else {
       console.log("Sending req...");
+      let user=JSON.parse(localStorage.getItem("user"));
       let body = {
         courseName: courseValue,
+        email:user.email
       };
       try {
         const response = await fetch(

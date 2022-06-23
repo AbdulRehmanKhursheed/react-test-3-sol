@@ -24,6 +24,7 @@ const Home = () => {
                     loadedCourses.push({
                         id: key,
                         courseName: data[key].courseName,
+                        email: data[key].email
                     });
                 }
                 else {
@@ -35,7 +36,9 @@ const Home = () => {
                 }
 
             }
-            setCourses(loadedCourses)
+
+            let loadedCoursesNew = loadedCourses.filter(elem => elem.email === currentUser.email );
+            setCourses(loadedCoursesNew)
 
             // ****************************************************************
             const response2 = await fetch(
@@ -49,10 +52,12 @@ const Home = () => {
             for (const key in data2) {
                     loadedCourses2.push({
                         id: key,
-                        courseName: data2[key].courseName,
+                        email: data2[key].email,
+                        status:data2[key].status
                     });
             }
-            setGreenPasses(greenPasses)
+            // setGreenPasses(loadedCourses2)
+                console.log(loadedCourses2);
             let userfoundLocal= greenPasses.find((element) => {
                 return element.email === currentUser.email ;
               })
