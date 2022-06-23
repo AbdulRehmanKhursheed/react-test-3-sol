@@ -7,6 +7,7 @@ import "./Home.css";
 const Home = () => {
     const [courses, setCourses] = useState([]);
     const [greenPasses, setGreenPasses] = useState([]);
+    const [showGreenBg,setBackground] =useState();
     let currentUser = JSON.parse(localStorage.getItem("user"))
     let collection = (!currentUser?.isAdmin) ? "Courses" : "GreenPassStatus"
     const fetchUsersHandler = useCallback(async () => {
@@ -36,9 +37,13 @@ const Home = () => {
                 }
 
             }
-
-            let loadedCoursesNew = loadedCourses.filter(elem => elem.email === currentUser.email );
-            setCourses(loadedCoursesNew)
+                if(collection=== "Courses") {
+                    let loadedCoursesNew = loadedCourses.filter(elem => elem.email === currentUser.email );
+                    setCourses(loadedCoursesNew)
+                }
+                else{
+                    setCourses(loadedCourses)
+                }
 
             // ****************************************************************
             const response2 = await fetch(
@@ -56,13 +61,10 @@ const Home = () => {
                         status:data2[key].status
                     });
             }
-            // setGreenPasses(loadedCourses2)
-                console.log(loadedCourses2);
-            let userfoundLocal= greenPasses.find((element) => {
+            let userfoundLocal= loadedCourses2.find((element) => {
                 return element.email === currentUser.email ;
               })
-              console.log(userfoundLocal.status);
-
+              setBackground(userfoundLocal.status)
         } catch (error) { }
     }, [collection, currentUser.email,currentUser.isAdmin, greenPasses]);
 
@@ -110,9 +112,9 @@ const Home = () => {
     let content;
     if (!currentUser?.isAdmin) {
         content = <p>Found no Courses.</p>;
-
+        let classNameForGreenBg=(showGreenBg === "Approved") ? "greenBg" : "" ;
         if (courses.length > 0) {
-            content = <ol >
+            content = <ol className={`${classNameForGreenBg}`}>
                 {courses.map((course) => (
                     <Course 
                         key={course.id}
