@@ -10,7 +10,6 @@ import { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 function App() {
   const [isLoggedIn, setisLoggedIn] = useState(null);
-  const [isAdmin, setisAdmin] = useState(null);
   let currentUser = JSON.parse(localStorage.getItem("user"))
   let navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +17,6 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem("user")) {
       setisLoggedIn(true);
-      console.log(location.pathname);
       navigate(`../${location.pathname}`, { replace: true });
     }
   }, [])
@@ -50,9 +48,7 @@ function App() {
             }
             <button onClick={logOut}>Logout</button>
           </div>
-        ) : (
-          <button onClick={logIn}>Login</button>
-        )}
+        ) :""}
 
 
       </div>

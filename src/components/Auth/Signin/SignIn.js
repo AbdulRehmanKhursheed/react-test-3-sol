@@ -6,9 +6,7 @@ const SignIn = (props) => {
   const isEmail = (value) => value.includes("@");
   const isPasswordLength = (value) => value.length > 5;
   let navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
   const [users,setUsers] = useState([]);
-  const [adminFound, setAdminFound] = useState(false);
   const [userFound, setUserFound] = useState(false);
   const [showMessage, setMessage]=useState()
   const fetchUsersHandler = useCallback(async () => {
@@ -31,13 +29,6 @@ const SignIn = (props) => {
         });
       }
       setUsers(loadedUsers)
-      // setAdminFound(
-      //   loadedUsers.find((element) => {
-      //     return element.email === emailValue;
-      //   })
-      // );
-      // setIsAdmin(false);
-      // console.log(adminFound);
     } catch (error) {}
   }, []);
 
@@ -72,23 +63,11 @@ const SignIn = (props) => {
     if (!formIsValid) {
       return;
     }
-    // setAdminFound(
-    //   let userfound= users.find((element) => {
-    //     console.log(element);
-    //     return element.email === emailValue;
-    //   })
-    // );
-    console.log(users);
-    console.log(emailValue);
+ 
     let userfoundLocal= users.find((element) => {
       return element.email === emailValue ;
     })
-    // setIsAdmin(false);
-    console.log(userfoundLocal);
     setUserFound(userfoundLocal)
-    console.log(userFound);
-    // console.log("Login Submitted!");
-    // 
     if(!userfoundLocal){
       console.log("not found");
       setMessage("User with entered email doesn't exist");
@@ -113,11 +92,7 @@ const SignIn = (props) => {
   return (
     <form onSubmit={submitHandler} className="align-middle">
       <h3>Sign In</h3>
-      { showMessage && 
-        <p className="error-text">
-         {showMessage}
-        </p>
-      }
+      { showMessage &&  <p className="error-text"> {showMessage} </p>}
       <div className={emailClasses}>
         <label htmlFor="name">E-Mail</label>
         <br />
@@ -128,9 +103,7 @@ const SignIn = (props) => {
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
         />
-        {emailHasError && (
-          <p className="error-text">Please enter a valid email address.</p>
-        )}
+         {emailHasError && ( <p className="error-text">Please enter a valid email address.</p> )}
       </div>
       <div className={passwordClasses}>
         <label htmlFor="name">Password</label>

@@ -1,7 +1,6 @@
 import "./ApplyGreenPass.css"
 import { useState, useEffect, useCallback } from "react";
 const ApplyGreenPass = () =>{
-    const [greenPass, setGreenPass] = useState([]);
     const [greenPassStatus, setGreenPassStatus] = useState([]);
     const fetchUsersHandler = useCallback(async () => {
         try {
@@ -15,18 +14,15 @@ const ApplyGreenPass = () =>{
             for (const key in data) {
                 loadedGreenPass.push({
                     id: key,
-                    greenPassStatus: data[key].greenPassStatus,
+                    greenPassStatus: data[key].status,
+                    email: data[key].email
                 });
             }
-            setGreenPass(loadedGreenPass)
-            let userDetails= localStorage.getItem("user")
-            console.log(userDetails);
-            setGreenPassStatus(
-                loadedGreenPass.find((element) => {
-                  console.log(element.email === userDetails.email);
-                  return element.email === userDetails.email;
-                }))
-                console.log(greenPassStatus);
+            let userDetails= JSON.parse(localStorage.getItem("user"))
+            let found = loadedGreenPass.find((element) => {
+              return element.email === userDetails.email;
+            })
+            setGreenPassStatus(found)
         } catch (error) { }
     }, []);
 
@@ -58,9 +54,8 @@ const ApplyGreenPass = () =>{
             console.log("Some error occured!");
           }
     }
-    let content = (!greenPassStatus || (greenPassStatus !== "Pending" || greenPassStatus !== "Approved") ) && <button className="blueButton" onClick={applyGreenPassHandler}>Apply Green Pass</button>
-
-    if (greenPassStatus.length > 0) {
+    let content = ((!greenPassStatus  || greenPassStatus.greenPassStatus === "rejected")) && <button className="blueButton" onClick={applyGreenPassHandler}>Apply Green Pass</button>
+    if (greenPassStatus && (greenPassStatus.greenPassStatus==="Approved" || greenPassStatus.greenPassStatus==="Pending")) {
         content = <p>You have already applied.</p>;
     }
     return(

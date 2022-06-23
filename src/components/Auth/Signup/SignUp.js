@@ -10,7 +10,6 @@ const SignUp = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [users,setUsers] = useState([]);
   const [adminFound, setAdminFound] = useState(false);
-  const [userAlreadyExist, setUserAlreadyExist] = useState(false);
   const [showMessage, setMessage]=useState()
   const fetchUsersHandler = useCallback(async () => {
     try {
@@ -31,7 +30,6 @@ const SignUp = (props) => {
           isAdmin: data[key].isAdmin,
         });
       }
-      console.log(loadedUsers);
       setUsers(loadedUsers)
       setAdminFound(
         loadedUsers.find((element) => {
@@ -105,7 +103,6 @@ const SignUp = (props) => {
         return element.email === emailValue;
       })
     if(foundUser){
-        setUserAlreadyExist(true);
         setMessage(" User Name with the given email already exist.")
         return;
     }
@@ -160,11 +157,7 @@ const SignUp = (props) => {
   return (
     <form onSubmit={submitHandler} className="align-middle">
       <h3>Sign Up</h3>
-      {showMessage && (
-        <p className="error-text">
-         {showMessage}
-        </p>
-      )}
+      {showMessage && ( <p className="error-text"> {showMessage} </p> )}
       <div className="control-group ">
         <div className={firstNameClasses}>
           <label htmlFor="name">First Name</label>
@@ -190,9 +183,7 @@ const SignUp = (props) => {
             onChange={lastNameChangeHandler}
             onBlur={lastNameBlurHandler}
           />
-          {lastNameHasError && (
-            <p className="error-text">Please enter a last name.</p>
-          )}
+          {lastNameHasError && (<p className="error-text">Please enter a last name.</p> )}
         </div>
       </div>
       <div className={emailClasses}>
@@ -205,9 +196,7 @@ const SignUp = (props) => {
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
         />
-        {emailHasError && (
-          <p className="error-text">Please enter a valid email address.</p>
-        )}
+        {emailHasError && ( <p className="error-text">Please enter a valid email address.</p> )}
       </div>
       <div className={passwordClasses}>
         <label htmlFor="name">Password</label>
@@ -219,9 +208,7 @@ const SignUp = (props) => {
           onChange={passwordChangeHandler}
           onBlur={passwordBlurHandler}
         />
-        {passwordHasError && (
-          <p className="error-text">Please enter ateast 6 characters.</p>
-        )}
+        {passwordHasError && ( <p className="error-text">Please enter ateast 6 characters.</p> )}
       </div>
       <div className={confirmPasswordClasses}>
         <label htmlFor="name">Confirm Password</label>
@@ -233,15 +220,9 @@ const SignUp = (props) => {
           onChange={confirmPasswordChangeHandler}
           onBlur={confirmPasswordBlurHandler}
         />
-        {confirmpPasswordHasError && (
-          <p className="error-text">Please enter atleast 6 characters</p>
-        )}
+         {confirmpPasswordHasError && ( <p className="error-text">Please enter atleast 6 characters</p> )}
       </div>
-      {passwordValue !== confirmPasswordValue && (
-        <p className="error-text">
-          Entered Password and confirm password does not match
-        </p>
-      )}
+      {passwordValue !== confirmPasswordValue && ( <p className="error-text"> Entered Password and confirm password does not match </p> )}
       {!adminFound?.isAdmin && (
         <>
           <label htmlFor="name">Is Admin?</label>

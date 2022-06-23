@@ -7,7 +7,6 @@ import "./Home.css";
 const Home = () => {
     const [courses, setCourses] = useState([]);
     const [greenPasses, setGreenPasses] = useState([]);
-    const [hasGreenPass,setHasGreenPass]=useState()
     let currentUser = JSON.parse(localStorage.getItem("user"))
     let collection = (!currentUser?.isAdmin) ? "Courses" : "GreenPassStatus"
     const fetchUsersHandler = useCallback(async () => {
@@ -60,20 +59,13 @@ const Home = () => {
               console.log(userfoundLocal.status);
 
         } catch (error) { }
-        // *******************************
-        // try {
-           
-            //   setHasGreenPass
-        
-    }, []);
+    }, [collection, currentUser.email,currentUser.isAdmin, greenPasses]);
 
     useEffect(() => {
         fetchUsersHandler();
     }, [fetchUsersHandler]);
 
     const approveGreenPass= async (val) =>{
-        console.log("Approve",val);
-            
         try {
             const response = await fetch(
               `https://react-solution-test-3-default-rtdb.firebaseio.com//GreenPassStatus/${val}/.json`,
@@ -92,8 +84,6 @@ const Home = () => {
           }
     }
     const rejectGreenPass= async (val) =>{
-        console.log("reject",val);
-               
         try {
             const response = await fetch(
               `https://react-solution-test-3-default-rtdb.firebaseio.com//GreenPassStatus/${val}/.json`,
